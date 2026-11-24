@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Does your income decide what's on your plate?</title>
+    <meta name="description" content="UK food purchases by income group, 2024/25: what the richest and the poorest households buy.">
+
+    <!-- Polices Google Fonts : Oswald (titres) et Inter (texte) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Ma feuille de style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ========== EN-TÊTE ========== -->
+    <header class="entete">
+        <p class="entete-titre">Food &amp; Money</p>
+        <nav>
+            <ul class="entete-menu">
+                <li><a href="#poorest">Shopping</a></li>
+                <li><a href="#chart">Data</a></li>
+                <li><a href="#method">Method</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="article">
+
+        <!-- ========== TITRE + CHAPEAU ========== -->
+        <p class="rubrique">Money › Cost of living</p>
+        <h1>Does your income decide what's on your plate?</h1>
+        <p class="chapeau">The UK's poorest households buy more sugar and fats, and far less fish and fresh fruit, than the richest – and they pay less for the fresh food they do buy. Here is what the latest government figures show.</p>
+        <p class="signature">By Kenan Zeybek · November 2026</p>
+
+        <figure class="photo-entete">
+            <img src="images/caddie.jpg" alt="A shopping trolley in a supermarket aisle" width="1600" height="900">
+            <figcaption>Photo: Eduardo Soares / Unsplash</figcaption>
+        </figure>
+
+        <!-- ========== INTRODUCTION ========== -->
+        <p>Every week, the richest 10% of UK households spend £45.72 per person on food and drink for the home. The poorest 10% spend £29.57 – about a third less.</p>
+        <p>But the gap is not only about money. The latest Family Food figures from the Department for Environment, Food and Rural Affairs (Defra), covering April 2024 to March 2025, show that income also shapes what ends up in the shopping basket.</p>
+
+        <blockquote class="citation">
+            <p>The richest households buy more fresh fruit, greens and fish – and pay more for them. The poorest buy 61% more sugar.</p>
+        </blockquote>
+
+        <!-- ========== SECTION 1 + FIGURE 1 ========== -->
+        <section id="poorest">
+            <h2>What the poorest buy more of – and less of</h2>
+            <p>Compared with the richest tenth of households, the poorest buy 61% more sugar and preserves, 41% more processed potatoes and 38% more fats, such as butter, margarine and oil, per person each week (Figure 1).</p>
+            <p>They buy less fresh food: 38% less fish, 37% less cheese, 31% fewer fresh green vegetables and 21% less fresh fruit.</p>
+            <p>For bread, meat products, biscuits, sweets and soft drinks, the amounts are similar: the difference is under 10%.</p>
+
+            <figure class="figure">
+                <img src="images/figure1.jpg" alt="Bar chart: compared with the richest 10%, the poorest 10% buy 61% more sugar and preserves, 41% more processed potatoes, 38% more fats and 17% more cakes and pastries, but 15% less fresh meat, 21% less fresh fruit and other fresh vegetables, 31% fewer fresh green vegetables, 37% less cheese and 38% less fish." width="1080" height="1350" loading="lazy">
+                <figcaption><strong>Figure 1.</strong> Difference in weekly household purchases per person: poorest 10% compared with richest 10% of UK households, 2024/25. Orange bars: the poorest buy more. Blue bars: the poorest buy less. Source: Defra, Family Food 2024/25.</figcaption>
+            </figure>
+        </section>
+
+        <!-- ========== SECTION 2 + FIGURE 2 (INTERACTIVE) ========== -->
+        <section id="chart">
+            <h2>The richest stand apart</h2>
+            <p>Figure 2 lets you explore the data for all ten income groups. Choose a food with the buttons above the chart, and switch between the amount bought and the money spent. Each bar is one income group, from the poorest 10% (group 1) to the richest 10% (group 10). Hover over a bar to see the exact figure, or click on it to compare it with the average.</p>
+
+            <figure class="figure boite-graphique">
+                <!-- Titre et sous-titre du graphique (changent avec l'aliment et le mode, voir script.js) -->
+                <h3 class="titre-graphique" id="titre-graphique">The richest buy the most fresh fruit</h3>
+                <p class="sous-titre-graphique" id="sous-titre-graphique">Amount of fresh fruit bought per person per week, by income group, UK, 2024/25</p>
+
+                <!-- Interaction externe 1 : choisir l'aliment -->
+                <p class="etiquette">Choose a food:</p>
+                <div class="boutons-aliments">
+                    <button class="bouton-aliment actif" data-aliment="fruit">Fresh fruit</button>
+                    <button class="bouton-aliment" data-aliment="legumes">Green veg</button>
+                    <button class="bouton-aliment" data-aliment="poisson">Fish</button>
+                    <button class="bouton-aliment" data-aliment="sucre">Sugar</button>
+                    <button class="bouton-aliment" data-aliment="graisses">Fats</button>
+                    <button class="bouton-aliment" data-aliment="pommesdeterre">Processed potatoes</button>
+                </div>
+
+                <!-- Interaction externe 2 : quantité ou dépense -->
+                <div class="interrupteur">
+                    <button class="bouton-mode actif" data-mode="quantite">Amount bought</button>
+                    <button class="bouton-mode" data-mode="depense">Money spent</button>
+                </div>
+
+                <!-- Le graphique Chart.js se dessine dans ce canvas -->
+                <div class="zone-graphique">
+                    <canvas id="graphique" role="img" aria-label="Bar chart of weekly household purchases per person for the ten income groups"></canvas>
+                </div>
+
+                <!-- Encadré mis à jour quand on clique sur une barre (aria-live = lu par les lecteurs d'écran) -->
+                <p class="chiffre-cle" id="chiffre-cle" aria-live="polite">Click on a bar to compare an income group with the average.</p>
+
+                <figcaption><strong>Figure 2.</strong> Weekly household purchases per person by income group, UK, 2024/25. Blue: poorest 10%. Orange: richest 10%. Dashed line: average of all groups (click on it in the legend to hide it). Source: Defra, Family Food 2024/25.</figcaption>
+            </figure>
+
+            <p>The chart shows that the change is not always gradual. For fresh fruit, households in the first eight income groups buy between 630g and 700g per person each week. The figure then rises to 781g in the ninth group and 842g in the richest. Fish follows the same pattern: 105g for the poorest, between 110g and 131g for the groups in the middle, then 170g for the richest.</p>
+            <p>Sugar works the other way. Most income groups buy between 70g and 102g a week; the richest buy just 51g.</p>
+            <p>In other words, much of the gap comes from the richest tenth, whose shopping looks very different from everyone else's.</p>
+        </section>
+
+        <!-- ========== SECTION 3 ========== -->
+        <section id="quality">
+            <h2>Paying for quality</h2>
+            <p>It's not just about how much you spend – it's about what ends up in your basket.</p>
+            <p>Comparing spending with the amounts bought shows the average price each group pays. The richest pay on average £3.83 per kilo of fresh fruit they buy, against £2.57 for the poorest. For fish, it is £14.54 a kilo against £10.92.</p>
+
+            <div class="chiffres">
+                <div class="carte">
+                    <p class="carte-nombre">£3.83 vs £2.57</p>
+                    <p class="carte-texte">per kilo of fresh fruit (richest vs poorest)</p>
+                </div>
+                <div class="carte">
+                    <p class="carte-nombre">£14.54 vs £10.92</p>
+                    <p class="carte-texte">per kilo of fish (richest vs poorest)</p>
+                </div>
+            </div>
+
+            <p>This suggests that richer households do not only buy more fresh food: they also choose more expensive products, whether that means different varieties, brands or quality.</p>
+        </section>
+
+        <!-- ========== SECTION 4 : MÉTHODE + SOURCES ========== -->
+        <section id="method">
+            <h2>How the figures are collected</h2>
+            <p>The data comes from the Living Costs and Food Survey, in which households record everything they buy over two weeks. Households are split into ten income groups of equal size, based on "equivalised" income – income adjusted for the size of the household.</p>
+            <p>The figures show what people buy for the home, not exactly what they eat, and they do not include eating out. Defra warns that purchases tend to be under-reported in this kind of diary survey, and many of these estimates have a margin of error of between 10% and 20%.</p>
+
+            <h3>Sources</h3>
+            <ul class="sources">
+                <li><a href="https://www.gov.uk/government/statistical-data-sets/family-food-datasets">Defra, Family Food datasets</a></li>
+                <li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/methodologies/livingcostsandfoodsurveyqmi">Office for National Statistics, Living Costs and Food Survey – Quality and Methodology Information</a></li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- ========== PIED DE PAGE ========== -->
+    <footer class="pied">
+        <p><strong>Student project – BUT MMI, Université Clermont Auvergne (Le Puy-en-Velay). Not affiliated with any newspaper.</strong></p>
+        <p>Photo: Eduardo Soares / Unsplash · Data: Defra, Family Food 2024/25 · Chart: Chart.js</p>
+    </footer>
+
+    <!-- Librairie Chart.js (version 4.6.1) puis mon script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
