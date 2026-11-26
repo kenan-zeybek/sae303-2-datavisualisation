@@ -50,12 +50,6 @@ const donnees = {
 // les numéros sous les barres
 const groupes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-// mêmes couleurs que dans le CSS
-const BLEU = "#1F6FB2";       // groupe 1
-const ORANGE = "#C2540A";     // groupe 10
-const GRIS = "#BDBDBD";       // les autres
-const BORDEAUX = "#8B1A4A";   // barre cliquée
-
 // ce qui est affiché au départ
 let alimentActuel = "fruit";
 let modeActuel = "quantite";
@@ -91,18 +85,24 @@ function nomDuGroupe(index) {
     }
 }
 
+// va chercher une couleur définie dans le CSS (dans :root)
+// Chart.js dessine dans un canvas, donc il a besoin qu'on lui donne les couleurs
+function couleurDuCss(nom) {
+    return getComputedStyle(document.documentElement).getPropertyValue(nom).trim();
+}
+
 // une couleur par barre
 function couleursDesBarres() {
     const couleurs = [];
     for (let i = 0; i < 10; i++) {
         if (i === barreSelectionnee) {
-            couleurs.push(BORDEAUX);
+            couleurs.push(couleurDuCss("--bordeaux"));
         } else if (i === 0) {
-            couleurs.push(BLEU);
+            couleurs.push(couleurDuCss("--bleu"));
         } else if (i === 9) {
-            couleurs.push(ORANGE);
+            couleurs.push(couleurDuCss("--orange"));
         } else {
-            couleurs.push(GRIS);
+            couleurs.push(couleurDuCss("--gris-barre"));
         }
     }
     return couleurs;
@@ -120,6 +120,9 @@ function ligneDeMoyenne(valeurs) {
 
 
 // création du graphique
+// Chart.js utilise la même police que le reste du site
+Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+
 const valeursDeDepart = donnees[alimentActuel][modeActuel];
 const canvas = document.getElementById("graphique");
 
@@ -140,7 +143,7 @@ const graphique = new Chart(canvas, {
                 type: "line",
                 label: "Average of all groups",
                 data: ligneDeMoyenne(valeursDeDepart),
-                borderColor: "#222222",
+                borderColor: couleurDuCss("--texte"),
                 borderWidth: 2,
                 borderDash: [8, 6],
                 pointRadius: 0,
@@ -171,7 +174,6 @@ const graphique = new Chart(canvas, {
             legend: {
                 position: "top",
                 labels: {
-                    font: { family: "Inter", size: 13 },
                     // je garde seulement la moyenne dans la légende, les couleurs sont expliquées sous le graphique
                     filter: function (element) {
                         return element.datasetIndex === 1;
