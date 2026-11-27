@@ -1,4 +1,4 @@
-/* couleurs réutilisées partout */
+/* couleurs réutilisées partout en utilisantr des variables de couleurs */
 :root {
     --bordeaux: #8B1A4A;
     --bordeaux-clair: #F6EEF2;
@@ -72,6 +72,13 @@ a {
     font-family: "Oswald", Arial, sans-serif;
     font-size: 24px;
     color: var(--bordeaux);
+}
+
+/* petite ligne sous le titre */
+.entete-journal {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--gris);
 }
 
 .entete-menu {

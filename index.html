@@ -18,7 +18,11 @@
 
     <!-- en-tête -->
     <header class="entete">
-        <p class="entete-titre">Food &amp; Money</p>
+        <div>
+            <p class="entete-titre">Food &amp; Money</p>
+            <!-- le journal pour lequel l'article est écrit -->
+            <p class="entete-journal">Student project for The i Paper, not affiliated with the newspaper</p>
+        </div>
         <nav>
             <ul class="entete-menu">
                 <li><a href="#poorest">Shopping</a></li>
@@ -89,7 +93,7 @@
                     <button class="bouton-mode" data-mode="depense">Money spent</button>
                 </div>
 
-                <!-- Chart.js dessine dans ce canvas -->
+                <!-- Chart.js dans ce canvas -->
                 <div class="zone-graphique">
                     <canvas id="graphique" role="img" aria-label="Bar chart of weekly household purchases per person for the ten income groups"></canvas>
                 </div>
@@ -142,11 +146,11 @@
 
     <!-- pied de page -->
     <footer class="pied">
-        <p><strong>Student project, BUT MMI, Université Clermont Auvergne (Le Puy-en-Velay). Not affiliated with any newspaper.</strong></p>
+        <p><strong>ZEYBEK Kenan, BUT MMI.</strong></p>
         <p>Photo: Eduardo Soares / Unsplash · Data: Defra, Family Food 2024/25 · Chart: Chart.js</p>
     </footer>
 
-    <!-- Chart.js d'abord, puis mon script -->
+    <!-- Chart.js mon script -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1/dist/chart.umd.min.js"></script>
     <script src="script.js"></script>
 </body>

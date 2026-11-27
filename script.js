@@ -1,7 +1,4 @@
-// Données reprises de mon tableur (Defra, Family Food 2024/25)
-// 10 valeurs par aliment : du groupe 1 (les plus pauvres) au groupe 10 (les plus riches)
-// quantite = grammes achetés par personne et par semaine, depense = en livres
-// Il y a un titre par mode parce que le message n'est pas le même en g et en £
+// données du tableur (Defra 2024/25), du groupe 1 au groupe 10
 const donnees = {
     fruit: {
         titreQuantite: "The richest buy the most fresh fruit",
@@ -47,16 +44,16 @@ const donnees = {
     }
 };
 
-// les numéros sous les barres
+// numéros sous les barres
 const groupes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-// ce qui est affiché au départ
+// aliment et mode affichés au départ
 let alimentActuel = "fruit";
 let modeActuel = "quantite";
-let barreSelectionnee = null; // pas encore de barre cliquée
+let barreSelectionnee = null;
 
 
-// moyenne d'un tableau
+// calcul de la moyenne
 function calculerMoyenne(tableau) {
     let total = 0;
     for (let i = 0; i < tableau.length; i++) {
@@ -65,7 +62,7 @@ function calculerMoyenne(tableau) {
     return total / tableau.length;
 }
 
-// ajoute l'unité : "842 g" ou "£3.23"
+// ajoute l'unité (g ou £)
 function formaterValeur(valeur) {
     if (modeActuel === "quantite") {
         return Math.round(valeur) + " g";
@@ -74,7 +71,7 @@ function formaterValeur(valeur) {
     }
 }
 
-// nom du groupe à partir de sa position (0 à 9)
+// nom du groupe à afficher
 function nomDuGroupe(index) {
     if (index === 0) {
         return "Group 1 (poorest 10%)";
@@ -85,13 +82,12 @@ function nomDuGroupe(index) {
     }
 }
 
-// va chercher une couleur définie dans le CSS (dans :root)
-// Chart.js dessine dans un canvas, donc il a besoin qu'on lui donne les couleurs
+// lit une couleur dans le css
 function couleurDuCss(nom) {
     return getComputedStyle(document.documentElement).getPropertyValue(nom).trim();
 }
 
-// une couleur par barre
+// couleur de chaque barre
 function couleursDesBarres() {
     const couleurs = [];
     for (let i = 0; i < 10; i++) {
@@ -108,7 +104,7 @@ function couleursDesBarres() {
     return couleurs;
 }
 
-// pour tracer la ligne de moyenne il faut 10 fois la même valeur
+// valeurs de la ligne de moyenne
 function ligneDeMoyenne(valeurs) {
     const moyenne = calculerMoyenne(valeurs);
     const ligne = [];
@@ -120,7 +116,6 @@ function ligneDeMoyenne(valeurs) {
 
 
 // création du graphique
-// Chart.js utilise la même police que le reste du site
 Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
 
 const valeursDeDepart = donnees[alimentActuel][modeActuel];
@@ -139,7 +134,7 @@ const graphique = new Chart(canvas, {
                 order: 2
             },
             {
-                // la ligne de moyenne en pointillés
+                // ligne de moyenne
                 type: "line",
                 label: "Average of all groups",
                 data: ligneDeMoyenne(valeursDeDepart),
@@ -159,9 +154,8 @@ const graphique = new Chart(canvas, {
             duration: 800
         },
 
-        // interaction interne 3 : clic sur une barre
+        // clic sur une barre (interaction interne 3)
         onClick: function (evenement, elements) {
-            // elements est vide si on clique à côté des barres
             if (elements.length > 0) {
                 barreSelectionnee = elements[0].index;
                 mettreAJourChiffreCle();
@@ -170,18 +164,18 @@ const graphique = new Chart(canvas, {
         },
 
         plugins: {
-            // interaction interne 2 : Chart.js masque/affiche une série quand on clique dans la légende
+            // légende cliquable (interaction interne 2)
             legend: {
                 position: "top",
                 labels: {
-                    // je garde seulement la moyenne dans la légende, les couleurs sont expliquées sous le graphique
+                    // seulement la moyenne dans la légende
                     filter: function (element) {
                         return element.datasetIndex === 1;
                     }
                 }
             },
 
-            // interaction interne 1 : l'infobulle au survol
+            // infobulle (interaction interne 1)
             tooltip: {
                 callbacks: {
                     title: function (items) {
@@ -205,7 +199,7 @@ const graphique = new Chart(canvas, {
                 }
             },
             y: {
-                beginAtZero: true, // sinon les écarts paraissent plus grands qu'ils ne sont
+                beginAtZero: true, // axe à partir de 0
                 title: {
                     display: true,
                     text: "Grams per person per week"
@@ -216,7 +210,7 @@ const graphique = new Chart(canvas, {
 });
 
 
-// recharge le graphique avec l'aliment et le mode choisis
+// mise à jour du graphique
 function mettreAJourGraphique() {
     const valeurs = donnees[alimentActuel][modeActuel];
 
@@ -232,10 +226,10 @@ function mettreAJourGraphique() {
 
     mettreAJourTitre();
 
-    graphique.update(); // sans ça rien ne change à l'écran
+    graphique.update(); // redessine le graphique
 }
 
-// titre et sous-titre au-dessus du graphique
+// titre et sous-titre du graphique
 function mettreAJourTitre() {
     const titre = document.getElementById("titre-graphique");
     const sousTitre = document.getElementById("sous-titre-graphique");
@@ -249,7 +243,7 @@ function mettreAJourTitre() {
     }
 }
 
-// phrase de l'encadré sous le graphique
+// phrase de l'encadré
 function mettreAJourChiffreCle() {
     const zoneTexte = document.getElementById("chiffre-cle");
 
@@ -284,25 +278,25 @@ function mettreAJourChiffreCle() {
 }
 
 
-// interaction externe 1 : les boutons des aliments
+// boutons des aliments 
 const boutonsAliments = document.querySelectorAll(".bouton-aliment");
 
 boutonsAliments.forEach(function (bouton) {
     bouton.addEventListener("click", function () {
-        // on enlève "actif" partout puis on le remet sur le bouton cliqué
+        // le bouton cliqué devient actif
         boutonsAliments.forEach(function (b) {
             b.classList.remove("actif");
         });
         bouton.classList.add("actif");
 
-        // data-aliment dans le HTML = nom de l'aliment dans l'objet donnees
+        // aliment choisi
         alimentActuel = bouton.dataset.aliment;
         mettreAJourGraphique();
         mettreAJourChiffreCle();
     });
 });
 
-// interaction externe 2 : quantité ou dépense
+// boutons grammes / livres (interaction externe 2)
 const boutonsMode = document.querySelectorAll(".bouton-mode");
 
 boutonsMode.forEach(function (bouton) {
@@ -312,11 +306,12 @@ boutonsMode.forEach(function (bouton) {
         });
         bouton.classList.add("actif");
 
+        // mode choisi
         modeActuel = bouton.dataset.mode;
         mettreAJourGraphique();
         mettreAJourChiffreCle();
     });
 });
 
-// premier titre au chargement de la page
+// titre au chargement de la page
 mettreAJourTitre();
